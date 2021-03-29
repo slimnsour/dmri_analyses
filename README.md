@@ -1,4 +1,9 @@
-# Slicer Tractography Tutorial
+# TIGRLab Slicer Tractography
+
+<p float="left">
+  <img src="https://user-images.githubusercontent.com/54225067/112897813-1373d680-90ae-11eb-8254-044c38df1594.png" height="350" />
+  <img src="https://user-images.githubusercontent.com/54225067/112897849-1c64a800-90ae-11eb-8b57-cfaae8977ac6.png" height="350" /> 
+</p>
 
 ### About
 
