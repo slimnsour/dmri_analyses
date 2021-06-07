@@ -1,9 +1,6 @@
-
-# Table of content
-# Learn more at https://jupyterbook.org/customize/toc.html
-
-- file: main
-
-- part: slicer
-  chapters:
-  - file: slicer/wma
+format: jb-book
+root: main
+options:
+  caption: slicer
+chapters:
+- file: slicer/wma
