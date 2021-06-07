@@ -2,8 +2,8 @@
 # Table of content
 # Learn more at https://jupyterbook.org/customize/toc.html
 
-root: main
-parts:
-  - caption: Slicer
-    chapters:
-    - file: slicer/wma
+- file: main
+
+- part: slicer
+  chapters:
+  - file: slicer/wma
