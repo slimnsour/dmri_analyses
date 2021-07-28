@@ -1,0 +1,70 @@
+# Use Ubuntu 20.04 LTS
+FROM ubuntu:focal-20210416
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+# Prepare environment
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+                    autoconf \
+                    build-essential \
+                    bzip2 \
+                    ca-certificates \
+                    cmake \
+                    curl \
+                    cython3 \
+                    gcc \
+                    git \
+                    libtool \
+                    lsb-release \
+                    pkg-config \
+                    xvfb && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Create a shared $HOME directory
+RUN useradd -m -s /bin/bash -G users wma
+WORKDIR /home/wma
+ENV HOME="/home/wma"
+
+# Install and set up Miniconda
+RUN curl -sSLO https://repo.anaconda.com/miniconda/Miniconda3-py38_4.9.2-Linux-x86_64.sh && \
+    bash Miniconda3-py38_4.9.2-Linux-x86_64.sh -b -p /usr/local/miniconda && \
+    rm Miniconda3-py38_4.9.2-Linux-x86_64.sh
+
+# Set CPATH for packages relying on compiled libs
+ENV PATH="/usr/local/miniconda/bin:$PATH" \
+    CPATH="/usr/local/miniconda/include:$CPATH" \
+    LANG="C.UTF-8" \
+    LC_ALL="C.UTF-8" \
+    PYTHONNOUSERSITE=1
+
+# Install whitematteranalysis package
+RUN pip install git+https://github.com/SlicerDMRI/whitematteranalysis.git@3b1a57b1e7593ab99496851de17c61e33758a45b
+
+WORKDIR /src
+
+# Download ORG White Matter Atlas
+RUN wm_download_anatomically_curated_atlas.py -atlas ORG-800FC-100HCP . && \
+    rm -rf /src/ORG-Atlases-1.2/__MACOSX
+
+ENV ATLASDIR="/src/ORG-Atlases-1.2/ORG-800FC-100HCP"
+
+# Install Slicer prerequisites
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+                    libpulse-dev \
+                    libnss3 \
+                    libglu1-mesa \
+                    libxcb-xinerama0
+
+# Download and install Slicer and SlicerDMRI
+RUN curl -sSL https://slicer.kitware.com/midas3/download?bitstream=1442746 -o Slicer-4.11.20210226-linux-amd64.tar.gz && \
+    tar -xzvf Slicer-4.11.20210226-linux-amd64.tar.gz && \
+    rm -fr Slicer-4.11.20210226-linux-amd64.tar.gz
+
+# Copy command line script
+COPY run_wma.sh /src/
+
+WORKDIR $HOME
+ENTRYPOINT ["/src/run_wma.sh"]
+
