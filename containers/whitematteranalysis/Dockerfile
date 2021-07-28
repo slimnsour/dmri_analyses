@@ -46,7 +46,6 @@ WORKDIR /src
 # Download ORG White Matter Atlas
 RUN wm_download_anatomically_curated_atlas.py -atlas ORG-800FC-100HCP . && \
     rm -rf /src/ORG-Atlases-1.2/__MACOSX
-
 ENV ATLASDIR="/src/ORG-Atlases-1.2/ORG-800FC-100HCP"
 
 # Install Slicer prerequisites
@@ -55,16 +54,22 @@ RUN apt-get update && \
                     libpulse-dev \
                     libnss3 \
                     libglu1-mesa \
-                    libxcb-xinerama0
+                    libxcb-xinerama0 \
+                    rsync
 
 # Download and install Slicer and SlicerDMRI
-RUN curl -sSL https://slicer.kitware.com/midas3/download?bitstream=1442746 -o Slicer-4.11.20210226-linux-amd64.tar.gz && \
-    tar -xzvf Slicer-4.11.20210226-linux-amd64.tar.gz && \
-    rm -fr Slicer-4.11.20210226-linux-amd64.tar.gz
+RUN curl -sSL https://slicer.kitware.com/midas3/download/bitstream/1023242 -o Slicer-4.10.2-linux-amd64.tar.gz && \
+    tar -xzf Slicer-4.10.2-linux-amd64.tar.gz -C . && \
+    rm -fr Slicer-4.10.2-linux-amd64.tar.gz
+RUN curl -sSL https://slicer.kitware.com/midas3/download/bitstream/1339540 -o 28257-linux-amd64-SlicerDMRI-git15a914a-2020-08-05.tar.gz && \
+    tar -xzf 28257-linux-amd64-SlicerDMRI-git15a914a-2020-08-05.tar.gz -C . && \
+    rsync -r 28257-linux-amd64-SlicerDMRI-git15a914a-2020-08-05/ Slicer-4.10.2-linux-amd64/ && \
+    rm -fr 28257-linux-amd64-SlicerDMRI-git15a914a-2020-08-05.tar.gz
+
+ENV SLICER="/src/Slicer-4.10.2-linux-amd64/Slicer"
 
 # Copy command line script
 COPY run_wma.sh /src/
 
 WORKDIR $HOME
 ENTRYPOINT ["/src/run_wma.sh"]
-
