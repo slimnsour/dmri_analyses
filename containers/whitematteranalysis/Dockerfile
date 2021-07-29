@@ -89,7 +89,10 @@ RUN curl -sSL https://slicer.kitware.com/midas3/download/bitstream/1339540 -o 28
     rm -fr 28257-linux-amd64-SlicerDMRI-git15a914a-2020-08-05*
 
 ENV SLICER="/src/Slicer-4.10.2-linux-amd64/Slicer" \
+    SLICER_LIB="/src/Slicer-4.10.2-linux-amd64/lib" \
     SLICER_CLI="/src/Slicer-4.10.2-linux-amd64/lib/Slicer-4.10/cli-modules"
+
+ENV LD_LIBRARY_PATH="${SLICER_LIB}/Slicer-4.10:${SLICER_CLI}:${SLICER_LIB}/Python/lib:${SLICER_LIB}/Slicer-4.10/qt-loadable-modules:${SLICER_LIB}/Teem-1.12.0:$LD_LIBRARY_PATH"
 
 # Copy command line script
 COPY run_wma.sh /src/
