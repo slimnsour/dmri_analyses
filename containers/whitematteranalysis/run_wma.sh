@@ -98,7 +98,7 @@ if [ ! -f "${outputfolder}/DiffusionMeasurements/${subject}_left_hemisphere_clus
   wm_diffusion_measurements.py \
     $outputfolder/FiberClustering/SeparatedClusters/${subject}/tracts_left_hemisphere/ \
     $outputfolder/DiffusionMeasurements/${subject}_left_hemisphere_clusters.csv \
-    $SLICER/lib/Slicer-4.10/cli-modules/FiberTractMeasurements
+    $SLICER_CLI/FiberTractMeasurements
 fi
 
 #right
@@ -106,7 +106,7 @@ if [ ! -f "${outputfolder}/DiffusionMeasurements/${subject}_right_hemisphere_clu
   wm_diffusion_measurements.py \
     $outputfolder/FiberClustering/SeparatedClusters/${subject}/tracts_right_hemisphere/ \
     $outputfolder/DiffusionMeasurements/${subject}_right_hemisphere_clusters.csv \
-    $SLICER/lib/Slicer-4.10/cli-modules/FiberTractMeasurements
+    $SLICER_CLI/FiberTractMeasurements
 fi
 
 #commissural
@@ -114,7 +114,7 @@ if [ ! -f "${outputfolder}/DiffusionMeasurements/${subject}_commissural_clusters
   wm_diffusion_measurements.py \
     $outputfolder/FiberClustering/SeparatedClusters/${subject}/tracts_commissural/ \
     $outputfolder/DiffusionMeasurements/${subject}_commissural_clusters.csv \
-    $SLICER/lib/Slicer-4.10/cli-modules/FiberTractMeasurements
+    $SLICER_CLI/FiberTractMeasurements
 fi
 
 #--------------------------------------------------------------------------------------------------------------------
@@ -126,5 +126,5 @@ if [ ! -f "${outputfolder}/DiffusionMeasurements/${subject}_anatomical_tracts.cs
   wm_diffusion_measurements.py \
     $outputfolder/AnatomicalTracts/${subject} \
     $outputfolder/DiffusionMeasurements/${subject}_anatomical_tracts.csv \
-    $SLICER/lib/Slicer-4.10/cli-modules/FiberTractMeasurements
+    $SLICER_CLI/FiberTractMeasurements
 fi

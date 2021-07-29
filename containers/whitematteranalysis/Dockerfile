@@ -18,6 +18,7 @@ RUN apt-get update && \
                     libtool \
                     lsb-release \
                     pkg-config \
+                    rsync \
                     xvfb && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -51,11 +52,32 @@ ENV ATLASDIR="/src/ORG-Atlases-1.2/ORG-800FC-100HCP"
 # Install Slicer prerequisites
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-                    libpulse-dev \
-                    libnss3 \
                     libglu1-mesa \
                     libxcb-xinerama0 \
-                    rsync
+                    libxcb-icccm4-dev \
+                    libxcb-image0-dev \
+                    libxcb-keysyms1-dev \
+                    libxcb-randr0 \
+                    libxcb-render-util0 \
+                    libxcb-xkb-dev \
+                    libxkbcommon-x11-dev \
+                    libgl1-mesa-dri \
+                    xserver-xorg-video-dummy \
+                    xserver-xorg-input-void \
+                    x11-xserver-utils \
+                    xinit \
+                    fonts-dejavu \
+                    x11vnc \
+                    websockify \
+                    openbox \
+                    tint2 \
+                    xterm \
+                    lxrandr \
+                    nitrogen \
+                    libpulse-dev \
+                    libnss3 \
+                    libasound2 && \
+   apt-get clean && rm -f /usr/share/applications/x11vnc.desktop
 
 # Download and install Slicer and SlicerDMRI
 RUN curl -sSL https://slicer.kitware.com/midas3/download/bitstream/1023242 -o Slicer-4.10.2-linux-amd64.tar.gz && \
@@ -64,9 +86,10 @@ RUN curl -sSL https://slicer.kitware.com/midas3/download/bitstream/1023242 -o Sl
 RUN curl -sSL https://slicer.kitware.com/midas3/download/bitstream/1339540 -o 28257-linux-amd64-SlicerDMRI-git15a914a-2020-08-05.tar.gz && \
     tar -xzf 28257-linux-amd64-SlicerDMRI-git15a914a-2020-08-05.tar.gz -C . && \
     rsync -r 28257-linux-amd64-SlicerDMRI-git15a914a-2020-08-05/ Slicer-4.10.2-linux-amd64/ && \
-    rm -fr 28257-linux-amd64-SlicerDMRI-git15a914a-2020-08-05.tar.gz
+    rm -fr 28257-linux-amd64-SlicerDMRI-git15a914a-2020-08-05*
 
-ENV SLICER="/src/Slicer-4.10.2-linux-amd64/Slicer"
+ENV SLICER="/src/Slicer-4.10.2-linux-amd64/Slicer" \
+    SLICER_CLI="/src/Slicer-4.10.2-linux-amd64/lib/Slicer-4.10/cli-modules"
 
 # Copy command line script
 COPY run_wma.sh /src/
