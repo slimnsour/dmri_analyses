@@ -48,7 +48,7 @@ RUN git clone https://github.com/pnlbwh/pnlNipype.git /src/pnlNipype && \
     cd /src/pnlNipype && \
     git checkout e8b9033
 
-ENV PYTHONPATH="/src/pnlNipype:$PYTHONPATH"
+ENV PYTHONPATH="/src/pnlNipype"
 
 # Install cmake
 RUN mkdir -p /src/cmake && \
@@ -70,8 +70,9 @@ RUN git clone https://github.com/pnlbwh/ukftractography.git /src/ukf && \
     cmake ../ && \
     make
 
-ENV UKFPATH=/src/ukf/build/UKFTractography-build/UKFTractography/bin \
-    PATH="$UKFPATH:$PATH"
+ENV PATH="/src/ukf/build/UKFTractography-build/UKFTractography/bin:$PATH"
+
+RUN pip install psutil
 
 # Copy command line script
 COPY run_ukf.sh /src/
