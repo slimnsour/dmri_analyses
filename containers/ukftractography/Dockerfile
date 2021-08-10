@@ -77,4 +77,4 @@ ENV UKFPATH=/src/ukf/build/UKFTractography-build/UKFTractography/bin \
 COPY run_ukf.sh /src/
 
 WORKDIR $HOME
-ENTRYPOINT ["/src/run_wma.sh"]
+ENTRYPOINT ["/src/run_ukf.sh"]

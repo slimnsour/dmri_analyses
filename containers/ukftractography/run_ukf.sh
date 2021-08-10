@@ -2,13 +2,20 @@
 
 inputfolder=$1
 subject=$2
+dwi=$3
+bval=$4
+bvec=$5
+mask=$6
+outputfolder=$7
 
-vtk_file="${inputfolder}/${subject}_desc-preproc_tractography.vtk"
+tractFolder="${outputfolder}/Tracts/${subject}"
+vtk_file="${tractFolder}/${subject}_desc-preproc_tractography.vtk"
+mkdir -p $tractFolder
 if [ ! -f "$vtk_file" ]; then
   ${PYTHONPATH}/scripts/ukf.py \
-    -i ${inputfolder}/${subject}_desc-preproc_dwi.nii.gz \
-    --bvals {inputfolder}/${subject}_desc-preproc_dwi.bval \
-    --bvecs {inputfolder}/${subject}_desc-preproc_dwi.bvec \
-    -m {inputfolder}/${subject}_desc-brain_mask.nii.gz \
+    -i ${dwi} \
+    --bvals ${bval} \
+    --bvecs ${bvec} \
+    -m ${mask} \
     -o ${vtk_file}
 fi
