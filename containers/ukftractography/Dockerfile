@@ -39,7 +39,8 @@ ENV PATH="/usr/local/miniconda/bin:$PATH" \
     PYTHONNOUSERSITE=1
 
 # Install conversion
-RUN pip install git+https://github.com/pnlbwh/conversion.git@63e4ca5b6909f3e0f860753032bba73c0f8977c6
+RUN pip install git+https://github.com/pnlbwh/conversion.git@63e4ca5b6909f3e0f860753032bba73c0f8977c6 \
+                psutil
 
 WORKDIR /src
 
@@ -71,8 +72,6 @@ RUN git clone https://github.com/pnlbwh/ukftractography.git /src/ukf && \
     make
 
 ENV PATH="/src/ukf/build/UKFTractography-build/UKFTractography/bin:$PATH"
-
-RUN pip install psutil
 
 # Copy command line script
 COPY run_ukf.sh /src/
