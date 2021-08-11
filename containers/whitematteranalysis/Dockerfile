@@ -97,5 +97,7 @@ ENV LD_LIBRARY_PATH="${SLICER_LIB}/Slicer-4.10:${SLICER_CLI}:${SLICER_LIB}/Pytho
 # Copy command line script
 COPY run_wma.sh /src/
 
+RUN chmod +x /src/run_wma.sh
+
 WORKDIR $HOME
 ENTRYPOINT ["/src/run_wma.sh"]

@@ -76,5 +76,7 @@ ENV PATH="/src/ukf/build/UKFTractography-build/UKFTractography/bin:$PATH"
 # Copy command line script
 COPY run_ukf.sh /src/
 
+RUN chmod +x /src/run_ukf.sh
+
 WORKDIR $HOME
 ENTRYPOINT ["/src/run_ukf.sh"]
