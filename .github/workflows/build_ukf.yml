@@ -1,15 +1,22 @@
 name: Deploy UKFTractography Container
 
 on:
+  # Automatic pushes will release as unstable
   push:
     branches: [ main ]
     paths: 'containers/ukftractography/*'
-    # Publish semver tags as releases.
-    tags: [ 'v*.*.*' ]
   pull_request:
     branches: [ main ]
     paths: 'containers/ukftractography/*'
+  # Manual push will release as latest
   workflow_dispatch:
+    branches: [ main ]
+    paths: 'containers/ukftractography/*'
+    inputs:
+      version:
+        description: 'Docker Push Version'     
+        required: false
+        default: 'unstable'
   
 jobs:
   docker:
@@ -34,11 +41,21 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       # And make it available for the builds
       - name: Build and push
+        if: ${{ github.event_name == 'pull_request' || github.event_name == 'push' }}
         uses: docker/build-push-action@v2
         with:
           context: containers/ukftractography
           push: true
-          tags: tigrlab/ukftractography:latest
+          tags: tigrlab/ukftractography:unstable
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new
+      - name: Build and push manual
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        uses: docker/build-push-action@v2
+        with:
+          context: containers/ukftractography
+          push: true
+          tags: tigrlab/ukftractography:${{ github.event.inputs.version }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
       - name: Move cache
