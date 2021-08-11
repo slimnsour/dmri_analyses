@@ -3,10 +3,12 @@ name: Deploy whitematteranalysis Container
 on:
   push:
     branches: [ main ]
+    paths: 'containers/whitematteranalysis/*'
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
   pull_request:
     branches: [ main ]
+    paths: 'containers/whitematteranalysis/*'
   workflow_dispatch:
   
 jobs:
@@ -36,7 +38,7 @@ jobs:
         with:
           context: containers/whitematteranalysis
           push: true
-          tags: tigrlab/wma:latest
+          tags: tigrlab/whitematteranalysis:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
       - name: Move cache
