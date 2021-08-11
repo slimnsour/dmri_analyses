@@ -14,7 +14,11 @@ on:
   workflow_dispatch:
     branches: [ main ]
     paths: 'containers/whitematteranalysis/*'
-    tags: [ 'v*.*.*' ]
+    inputs:
+      version:
+        description: 'Docker Push Version'     
+        required: false
+        default: 'unstable'
   
 jobs:
   docker:
@@ -39,11 +43,22 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       # And make it available for the builds
       - name: Build and push
+        if: ${{ github.event_name == 'pull_request' || github.event_name == 'push' }}
         uses: docker/build-push-action@v2
         with:
           context: containers/whitematteranalysis
           push: true
-          tags: tigrlab/whitematteranalysis:${{ steps.meta.outputs.tags }}
+          tags: slimnsour/whitematteranalysis:unstable
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new
+      # And make it available for the builds
+      - name: Build and push manual
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        uses: docker/build-push-action@v2
+        with:
+          context: containers/whitematteranalysis
+          push: true
+          tags: slimnsour/whitematteranalysis:${{ github.event.inputs.version }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
       - name: Move cache
