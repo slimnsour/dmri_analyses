@@ -36,7 +36,7 @@ jobs:
         with:
           context: containers/whitematteranalysis
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/wma:latest
+          tags: tigrlab/wma:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
       - name: Move cache
