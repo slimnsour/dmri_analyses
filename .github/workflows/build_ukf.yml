@@ -1,15 +1,20 @@
 name: Deploy UKFTractography Container
 
 on:
+  # Automatic pushes will release as unstable
   push:
     branches: [ main ]
     paths: 'containers/ukftractography/*'
-    # Publish semver tags as releases.
-    tags: [ 'v*.*.*' ]
+    tags: [ 'unstable' ]
   pull_request:
     branches: [ main ]
     paths: 'containers/ukftractography/*'
+    tags: [ 'unstable' ]
+  # Manual push will release as latest
   workflow_dispatch:
+    branches: [ main ]
+    paths: 'containers/ukftractography/*'
+    tags: [ 'v*.*.*' ]
   
 jobs:
   docker:
@@ -38,7 +43,7 @@ jobs:
         with:
           context: containers/ukftractography
           push: true
-          tags: tigrlab/ukftractography:latest
+          tags: tigrlab/ukftractography:${{ steps.meta.outputs.tags }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
       - name: Move cache

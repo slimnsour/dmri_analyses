@@ -1,15 +1,20 @@
 name: Deploy whitematteranalysis Container
 
 on:
+  # Automatic pushes will release as unstable
   push:
     branches: [ main ]
     paths: 'containers/whitematteranalysis/*'
-    # Publish semver tags as releases.
-    tags: [ 'v*.*.*' ]
+    tags: [ 'unstable' ]
   pull_request:
     branches: [ main ]
     paths: 'containers/whitematteranalysis/*'
+    tags: [ 'unstable' ]
+  # Manual push will release as latest
   workflow_dispatch:
+    branches: [ main ]
+    paths: 'containers/whitematteranalysis/*'
+    tags: [ 'v*.*.*' ]
   
 jobs:
   docker:
@@ -38,7 +43,7 @@ jobs:
         with:
           context: containers/whitematteranalysis
           push: true
-          tags: tigrlab/whitematteranalysis:latest
+          tags: tigrlab/whitematteranalysis:${{ steps.meta.outputs.tags }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
       - name: Move cache
